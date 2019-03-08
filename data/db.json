@@ -1,0 +1,71 @@
+{
+    "activities": [
+      {
+        "name": "Brushing - Morning",
+        "uuid": "brushing_id",
+        "color": "#ff00ff",
+        "tasks": [
+          {
+            "name": "rinsing",
+            "uuid": "brushing_rinsing_id",
+            "duration": 120,
+            "pic": "picture",
+            "audio-ticker": "ticker.wav",
+            "audio-completion": "trumpet.wav",
+            "pause": 5
+          },
+          {
+            "name": "brushing",
+            "uuid": "brushing_brushing_id",
+            "duration": 360,
+            "pic": "picture",
+            "audio-ticker": "ticker.wav",
+            "audio-completion": "trumpet.wav",
+            "pause": 5
+          },
+          {
+            "name": "flossing",
+            "uuid": "brushing_flossing_id",
+            "duration": 360,
+            "pic": "picture",
+            "audio-ticker": "ticker.wav",
+            "audio-completion": "trumpet.wav",
+            "pause": 5
+          }
+        ],
+        "startup-pause": 5
+      },
+      {
+        "name": "Dressing",
+        "uuid": "dressing_id",
+        "color": "#ff00ff",
+        "tasks": [
+          {
+            "name": "Bottom",
+            "uuid": "dressing_rinsing_id",
+            "duration": 120,
+            "pic": "picture",
+            "audio-ticker": "ticker.wav",
+            "audio-completion": "trumpet.wav",
+            "pause": 5
+          },
+          {
+            "name": "Top",
+            "uuid": "dressing_brushing_id",
+            "duration": 360,
+            "pic": "picture",
+            "audio-ticker": "ticker.wav",
+            "audio-completion": "trumpet.wav",
+            "pause": 5
+          }
+        ],
+        "startup-pause": 5
+      }
+    ],
+    "sequences": [
+      {
+        "name": "Getting ready for school",
+        "activities": ["brushing_id", "dressing_id"]
+      }
+    ]
+  }
