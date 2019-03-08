@@ -28,7 +28,7 @@ export default class OngoingActivity extends React.Component {
     isTaskRunning: true
   };
 
-  onStudyChange = (newtaskDuration) => {
+  onDurationChange = (newtaskDuration) => {
     this.setState({
       taskDuration: newtaskDuration
     })
@@ -52,6 +52,14 @@ export default class OngoingActivity extends React.Component {
     });
   }
 
+  startSequentialTimer = (tasks) => {
+    tasks.map((eachTask) => {
+      console.log(eachTask.duration + ' - ' + eachTask.warmup);
+
+      //this is where the sequential timer logic should go.
+    })
+  };
+
   componentWillReceiveProps(nextProps) {
     let duration = Number(Number.parseFloat((nextProps.navigation.getParam('task', data.activities[0].tasks[0]).duration) / 60).toFixed(2));
     
@@ -61,20 +69,10 @@ export default class OngoingActivity extends React.Component {
     
     let tasks = nextProps.navigation.getParam('activity', {}).tasks;
 
-    const functionWithPromise = item => { //a function that returns a promise
-      return Promise.resolve('ok')
-    }
+    
 
-    const anAsyncFunction = async item => {
-      return await functionWithPromise(item)
-    }
+    this.startSequentialTimer(tasks);
 
-    const runTimer = async () => {
-      return await Promise.all(tasks.map(item => anAsyncFunction(item)))
-    }
-
-    const t = runTimer()
-    console.log(t)
   }
 
 

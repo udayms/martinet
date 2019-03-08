@@ -12,7 +12,7 @@
             "pic": "picture",
             "audio-ticker": "ticker.wav",
             "audio-completion": "trumpet.wav",
-            "pause": 5
+            "warmup": 5
           },
           {
             "name": "brushing",
@@ -21,7 +21,7 @@
             "pic": "picture",
             "audio-ticker": "ticker.wav",
             "audio-completion": "trumpet.wav",
-            "pause": 5
+            "warmup": 5
           },
           {
             "name": "flossing",
@@ -30,10 +30,10 @@
             "pic": "picture",
             "audio-ticker": "ticker.wav",
             "audio-completion": "trumpet.wav",
-            "pause": 5
+            "warmup": 5
           }
         ],
-        "startup-pause": 5
+        "startup-warmup": 5
       },
       {
         "name": "Dressing",
@@ -47,7 +47,7 @@
             "pic": "picture",
             "audio-ticker": "ticker.wav",
             "audio-completion": "trumpet.wav",
-            "pause": 5
+            "warmup": 5
           },
           {
             "name": "Top",
@@ -56,10 +56,10 @@
             "pic": "picture",
             "audio-ticker": "ticker.wav",
             "audio-completion": "trumpet.wav",
-            "pause": 5
+            "warmup": 5
           }
         ],
-        "startup-pause": 5
+        "startup-warmup": 5
       }
     ],
     "sequences": [
