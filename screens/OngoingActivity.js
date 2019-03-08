@@ -83,6 +83,12 @@ export default class OngoingActivity extends React.Component {
     const task = navigation.getParam('task', {});
     const activity = navigation.getParam('activity', {});
 
+    convertTextToUpperCase = (text) => {
+      if(text)
+      return text.toUpperCase();
+      
+      return '';
+    };
   
     return (
       <View style={styles.container}>
@@ -113,7 +119,7 @@ export default class OngoingActivity extends React.Component {
             <Text style={styles.getStartedText}>{activity.name}</Text>
 
             <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-              <MonoText style={styles.codeHighlightText}>{task.name} ({task.duration}s)</MonoText>
+              <MonoText style={[styles.codeHighlightText, styles.taskName]}>{convertTextToUpperCase(task.name)} ({task.duration}s)</MonoText>
             </View>
             <TimerContainer
               taskDuration={this.state.taskDuration}
@@ -168,6 +174,9 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight,
     backgroundColor: '#ecf0f1',
   },
+  taskName: {
+    textTransform: 'uppercase'
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -203,6 +212,7 @@ const styles = StyleSheet.create({
   },
   codeHighlightText: {
     color: 'rgba(96,100,109, 0.8)',
+    textTransform: 'uppercase'
   },
   codeHighlightContainer: {
     backgroundColor: 'rgba(0,0,0,0.05)',

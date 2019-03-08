@@ -47,13 +47,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   eachActivity: {
-    padding: 20
+    padding: 20,
+    fontWeight: 'bold'
   },
   eachTask: {
     paddingLeft: 50,
     paddingTop: 15,
     paddingBottom: 15,
     borderBottomWidth: 0.5,
-    borderBottomColor: '#ecf0f1'
+    borderBottomColor: '#ecf0f1',
+    textTransform: 'capitalize'
   }
 });
