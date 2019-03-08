@@ -10,7 +10,7 @@ const Timer = ({ timeLeft }) => {
 const styles = StyleSheet.create({
     timer: {
         color: '#000',
-        fontSize: 96,
+        fontSize: 150,
     }
 })
 

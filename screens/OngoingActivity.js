@@ -53,9 +53,28 @@ export default class OngoingActivity extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    let duration = Number(Number.parseFloat((nextProps.navigation.getParam('task', data.activities[0].tasks[0]).duration) / 60).toFixed(2));
+    
     this.setState({
-      taskDuration: Math.floor( (nextProps.navigation.getParam('task', data.activities[0].tasks[0]).duration) / 60)
+      taskDuration: duration
     });
+    
+    let tasks = nextProps.navigation.getParam('activity', {}).tasks;
+
+    const functionWithPromise = item => { //a function that returns a promise
+      return Promise.resolve('ok')
+    }
+
+    const anAsyncFunction = async item => {
+      return await functionWithPromise(item)
+    }
+
+    const runTimer = async () => {
+      return await Promise.all(tasks.map(item => anAsyncFunction(item)))
+    }
+
+    const t = runTimer()
+    console.log(t)
   }
 
 
