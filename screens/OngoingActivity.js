@@ -12,7 +12,7 @@ import { WebBrowser, Constants } from 'expo';
 import moment from 'moment';
 import data from '../data/db.json';
 
-import TimerContainer from '../components/TimerContainer';
+import Timer from 'react-compound-timer';
 
 import { MonoText } from '../components/StyledText';
 
@@ -23,33 +23,15 @@ export default class OngoingActivity extends React.Component {
   };
 
   state = {
-    isLoadingComplete: false,
-    taskDuration: 25,
-    isTaskRunning: true
+    isLoadingComplete: false
   };
 
-  onDurationChange = (newtaskDuration) => {
-    this.setState({
-      taskDuration: newtaskDuration
-    })
-  }
-
-  onTimerEnd = () => {
-    this.setState(prevState => ({
-      isTaskRunning: !prevState.isTaskRunning
-    }))
-  }
-
   componentWillUnmount = () => {
-    this.setState({
-      taskDuration: 0
-    });
+    
   }
 
   componentWillMount = () => {
-    this.setState({
-      taskDuration: 0
-    });
+    
   }
 
   startSequentialTimer = (tasks) => {
@@ -61,17 +43,6 @@ export default class OngoingActivity extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    let duration = Number(Number.parseFloat((nextProps.navigation.getParam('task', data.activities[0].tasks[0]).duration) / 60).toFixed(2));
-    
-    this.setState({
-      taskDuration: duration
-    });
-    
-    let tasks = nextProps.navigation.getParam('activity', {}).tasks;
-
-    
-
-    this.startSequentialTimer(tasks);
 
   }
 
@@ -119,11 +90,30 @@ export default class OngoingActivity extends React.Component {
             <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
               <MonoText style={[styles.codeHighlightText, styles.taskName]}>{convertTextToUpperCase(task.name)} ({task.duration}s)</MonoText>
             </View>
-            <TimerContainer
-              taskDuration={this.state.taskDuration}
-              isTaskRunning={this.state.isTaskRunning}
-              onTimerEnd={this.onTimerEnd}>
-            </TimerContainer>
+            
+            <Text  style={styles.timer}>
+            <Timer
+    initialTime={60000 * 60 * 48 + 15000}
+    direction="backward"
+    checkpoints={[
+      {
+          time: 60000 * 60,
+          callback: () => console.log('Checkpoint A'),
+      },
+      {
+          time: 60000 * 60,
+          callback: () => console.log('Checkpoint B'),
+      }
+  ]}
+> 
+    {() => (
+        <React.Fragment>
+            <Text style={styles.timerTextMins}><Timer.Minutes/></Text>
+            <Text style={styles.timerTextSeconds}><Timer.Seconds/></Text>
+        </React.Fragment>
+    )}
+</Timer>
+            </Text>
           </View>
         </ScrollView>
       </View>
@@ -165,6 +155,12 @@ export default class OngoingActivity extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  timerTextMins: {
+    fontSize: 132
+  },
+  timerTextSeconds: {
+    fontSize: 52
+  },
   timer: {
     flex: 1,
     alignItems: 'center',
