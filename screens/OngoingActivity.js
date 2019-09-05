@@ -37,20 +37,36 @@ export default class OngoingActivity extends React.Component {
   
 
   componentWillReceiveProps(nextProps) {
-    startSequentialTimer = (tasks) => {
-      nextProps.navigation.state.params.activity.duration = 0;
+
+    processActivityTimers = (tasks) => {
+      let checkPoints = [];
+      let activityDuration = 0;
+      let taskIndex = 0;
+
+      //calculating activityDuration 
+      //based on task durations
       tasks.map((eachTask) => {
-        
-        nextProps.navigation.state.params.activity.duration += eachTask.duration;
-        //this is where the sequential timer logic should go.
+        activityDuration += eachTask.duration;
       })
 
-      return nextProps.navigation.state.params.activity.duration;
+      //building out checkpoints
+      tasks.map((eachTask) => {
+        checkPoints.push({
+          taskIndex: taskIndex,
+          taskName: eachTask.name,
+          duration: activityDuration - eachTask.duration
+        });
 
+        taskIndex++;
+      })
 
+      nextProps.navigation.state.params.activity.duration = activityDuration;
+      nextProps.navigation.state.params.activity.checkpoints = checkPoints;
+
+      return nextProps.navigation.state.params.activity;
     };
 
-    console.log(startSequentialTimer(nextProps.navigation.state.params.activity.tasks));
+    console.log( JSON.stringify( processActivityTimers( nextProps.navigation.state.params.activity ) ) );
   }
 
 
@@ -66,6 +82,21 @@ export default class OngoingActivity extends React.Component {
 
       return '';
     };
+    
+    let taskCheckpoints = [
+      {
+        time: 8 * 1000,
+        callback: () => console.log('Checkpoint A'),
+      },
+      {
+        time: 5 * 1000,
+        callback: () => console.log('Checkpoint B'),
+      },
+      {
+        time: 0,
+        callback: () => console.log('Done'),
+      }
+    ];
 
     return (
       <View style={styles.container}>
@@ -104,21 +135,7 @@ export default class OngoingActivity extends React.Component {
                 initialTime={10 * 1000}
                 direction="backward"
                 lastUnit="m"
-                checkpoints={[
-                  {
-                    time: 8 * 1000,
-                    callback: () => console.log('Checkpoint A'),
-                  },
-                  {
-                    time: 5 * 1000,
-                    callback: () => console.log('Checkpoint B'),
-                  }
-                  ,
-                  {
-                    time: 0,
-                    callback: () => console.log('Done'),
-                  }
-                ]}
+                checkpoints={taskCheckpoints}
               >
                 {() => (
                   <React.Fragment>
