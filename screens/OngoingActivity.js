@@ -38,18 +38,19 @@ export default class OngoingActivity extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     startSequentialTimer = (tasks) => {
-      let activityDuration = 0;
+      nextProps.navigation.state.params.activity.duration = 0;
       tasks.map((eachTask) => {
         
-        activityDuration += eachTask.duration;
-        console.log(eachTask.duration + ' - ' + eachTask.warmup + ' - ' + activityDuration);
+        nextProps.navigation.state.params.activity.duration += eachTask.duration;
         //this is where the sequential timer logic should go.
       })
+
+      return nextProps.navigation.state.params.activity.duration;
 
 
     };
 
-    startSequentialTimer(nextProps.navigation.state.params.activity.tasks);
+    console.log(startSequentialTimer(nextProps.navigation.state.params.activity.tasks));
   }
 
 
@@ -92,14 +93,14 @@ export default class OngoingActivity extends React.Component {
 
 
           <View style={styles.timer}>
-            <Text style={styles.getStartedText}>{activity.name}</Text>
+            <Text style={styles.getStartedText}>{activity.name} - {activity.duration}s </Text>
 
             <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
               <MonoText style={[styles.codeHighlightText, styles.taskName]}>{convertTextToUpperCase(task.name)} ({task.duration}s)</MonoText>
             </View>
 
             <Text style={styles.timer}>
-              <Timer
+              {/* <Timer
                 initialTime={10 * 1000}
                 direction="backward"
                 lastUnit="m"
@@ -125,7 +126,7 @@ export default class OngoingActivity extends React.Component {
                     <Text style={styles.timerTextSeconds}><Timer.Seconds /></Text>
                   </React.Fragment>
                 )}
-              </Timer>
+              </Timer> */}
 
               
             </Text>
