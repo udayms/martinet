@@ -96,7 +96,7 @@ export default class OngoingActivity extends React.Component {
             <Text style={styles.getStartedText}>{activity.name} - {activity.duration}s </Text>
 
             <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-              <MonoText style={[styles.codeHighlightText, styles.taskName]}>{convertTextToUpperCase(task.name)} ({task.duration}s)</MonoText>
+              <MonoText style={[styles.codeHighlightText, styles.taskName]}>{convertTextToUpperCase(task.name)} ({task.duration})s</MonoText>
             </View>
 
             <Text style={styles.timer}>
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ecf0f1',
   },
   taskName: {
-    textTransform: 'uppercase'
+    // textTransform: 'uppercase'
   },
   container: {
     flex: 1,
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
   },
   codeHighlightText: {
     color: 'rgba(96,100,109, 0.8)',
-    textTransform: 'uppercase'
+    //textTransform: 'uppercase'
   },
   codeHighlightContainer: {
     backgroundColor: 'rgba(0,0,0,0.05)',
@@ -230,9 +230,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   getStartedText: {
-    fontSize: 17,
+    fontSize: 32,
     color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
+    lineHeight: 34,
     textAlign: 'center',
   },
   tabBarInfoContainer: {

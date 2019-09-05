@@ -17,7 +17,7 @@ export default class AllActivities extends React.Component {
     const { navigate } = this.props.navigation;
     return (    
       <View>
-      <Text style={styles.eachActivity}>{item.name}</Text>
+      <Text style={styles.eachActivity} onPress={() => navigate('OngoingActivity', { activity: item, task: item.tasks[0] })}>{item.name}</Text>
         <FlatList
         data={item.tasks} 
           keyExtractor={(item) => item.uuid}
@@ -29,7 +29,7 @@ export default class AllActivities extends React.Component {
 }
 
   render() {
-    
+    const textColor = this.props.selected ? 'red' : 'black';
     return (
       <FlatList
         data={data.activities}
