@@ -2,9 +2,9 @@
   "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 98501,
-  "expoServerNgrokUrl": "https://ka-btu.anonymous.martinet.exp.direct",
-  "packagerNgrokUrl": "https://packager.ka-btu.anonymous.martinet.exp.direct",
-  "ngrokPid": 98524,
+  "packagerPid": 21935,
+  "expoServerNgrokUrl": "https://ka-btu.udayshankar.martinet.exp.direct",
+  "packagerNgrokUrl": "https://packager.ka-btu.udayshankar.martinet.exp.direct",
+  "ngrokPid": 21998,
   "webpackServerPort": null
 }

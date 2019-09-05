@@ -18,11 +18,7 @@ OngoingActivityStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-timer${focused ? '' : '-outline'}`
-          : 'ios-timer'
-      }
+      name={Platform.OS === 'ios' ? 'ios-timer' : 'ios-timer'}
     />
   ),
 };

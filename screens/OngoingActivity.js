@@ -27,23 +27,29 @@ export default class OngoingActivity extends React.Component {
   };
 
   componentWillUnmount = () => {
-    
+
   }
 
   componentWillMount = () => {
-    
+
   }
 
-  startSequentialTimer = (tasks) => {
-    tasks.map((eachTask) => {
-      console.log(eachTask.duration + ' - ' + eachTask.warmup);
-
-      //this is where the sequential timer logic should go.
-    })
-  };
+  
 
   componentWillReceiveProps(nextProps) {
+    startSequentialTimer = (tasks) => {
+      let activityDuration = 0;
+      tasks.map((eachTask) => {
+        
+        activityDuration += eachTask.duration;
+        console.log(eachTask.duration + ' - ' + eachTask.warmup + ' - ' + activityDuration);
+        //this is where the sequential timer logic should go.
+      })
 
+
+    };
+
+    startSequentialTimer(nextProps.navigation.state.params.activity.tasks);
   }
 
 
@@ -52,22 +58,23 @@ export default class OngoingActivity extends React.Component {
     const task = navigation.getParam('task', {});
     const activity = navigation.getParam('activity', {});
 
+
     convertTextToUpperCase = (text) => {
-      if(text)
-      return text.toUpperCase();
-      
+      if (text)
+        return text.toUpperCase();
+
       return '';
     };
-  
+
     return (
       <View style={styles.container}>
-          <NavigationEvents
-            onDidBlur={onBlur => this.setState({
-              taskDuration: 0
-            }) }
-          />
+        <NavigationEvents
+          onDidBlur={onBlur => this.setState({
+            taskDuration: 0
+          })}
+        />
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        
+
           <View style={styles.welcomeContainer}>
             <Image
               source={
@@ -82,37 +89,45 @@ export default class OngoingActivity extends React.Component {
           <View style={styles.getStartedContainer}>
             {this._maybeRenderDevelopmentModeWarning()}
           </View>
-          
-          
+
+
           <View style={styles.timer}>
             <Text style={styles.getStartedText}>{activity.name}</Text>
 
             <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
               <MonoText style={[styles.codeHighlightText, styles.taskName]}>{convertTextToUpperCase(task.name)} ({task.duration}s)</MonoText>
             </View>
-            
-            <Text  style={styles.timer}>
-            <Timer
-    initialTime={60000 * 60 * 48 + 15000}
-    direction="backward"
-    checkpoints={[
-      {
-          time: 60000 * 60,
-          callback: () => console.log('Checkpoint A'),
-      },
-      {
-          time: 60000 * 60,
-          callback: () => console.log('Checkpoint B'),
-      }
-  ]}
-> 
-    {() => (
-        <React.Fragment>
-            <Text style={styles.timerTextMins}><Timer.Minutes/></Text>
-            <Text style={styles.timerTextSeconds}><Timer.Seconds/></Text>
-        </React.Fragment>
-    )}
-</Timer>
+
+            <Text style={styles.timer}>
+              <Timer
+                initialTime={10 * 1000}
+                direction="backward"
+                lastUnit="m"
+                checkpoints={[
+                  {
+                    time: 8 * 1000,
+                    callback: () => console.log('Checkpoint A'),
+                  },
+                  {
+                    time: 5 * 1000,
+                    callback: () => console.log('Checkpoint B'),
+                  }
+                  ,
+                  {
+                    time: 0,
+                    callback: () => console.log('Done'),
+                  }
+                ]}
+              >
+                {() => (
+                  <React.Fragment>
+                    <Text style={styles.timerTextMins}><Timer.Minutes /></Text>
+                    <Text style={styles.timerTextSeconds}><Timer.Seconds /></Text>
+                  </React.Fragment>
+                )}
+              </Timer>
+
+              
             </Text>
           </View>
         </ScrollView>
