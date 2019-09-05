@@ -9,8 +9,7 @@ import AllSequences from '../screens/AllSequences';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const OngoingActivityStack = createStackNavigator({
-  OngoingActivity: OngoingActivity,
-  AllActivities: AllActivities
+  OngoingActivity: OngoingActivity
 });
 
 OngoingActivityStack.navigationOptions = {
@@ -52,7 +51,7 @@ AllSequencesStack.navigationOptions = {
 };
 
 const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen, 
+  Settings: SettingsScreen,
 });
 
 SettingsStack.navigationOptions = {
@@ -66,8 +65,11 @@ SettingsStack.navigationOptions = {
 };
 
 export default createBottomTabNavigator({
-  OngoingActivityStack,
-  AllActivitiesStack,
-  AllSequencesStack,
-  SettingsStack,
-});
+  Ongoing: OngoingActivityStack,
+  Activities: AllActivitiesStack,
+  Sequences: AllSequencesStack,
+  Settings: SettingsStack,
+},
+  {
+    initialRouteName: 'Activities'
+  });

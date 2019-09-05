@@ -31,49 +31,51 @@ export default class OngoingActivity extends React.Component {
   }
 
   componentWillMount = () => {
-
+    
   }
 
   
 
   componentWillReceiveProps(nextProps) {
 
-    processActivityTimers = (tasks) => {
-      let checkPoints = [];
-      let activityDuration = 0;
-      let taskIndex = 0;
+    
 
-      //calculating activityDuration 
-      //based on task durations
-      tasks.map((eachTask) => {
-        activityDuration += eachTask.duration;
-      })
-
-      //building out checkpoints
-      tasks.map((eachTask) => {
-        checkPoints.push({
-          taskIndex: taskIndex,
-          taskName: eachTask.name,
-          duration: activityDuration - eachTask.duration
-        });
-
-        taskIndex++;
-      })
-
-      nextProps.navigation.state.params.activity.duration = activityDuration;
-      nextProps.navigation.state.params.activity.checkpoints = checkPoints;
-
-      return nextProps.navigation.state.params.activity;
-    };
-
-    console.log( JSON.stringify( processActivityTimers( nextProps.navigation.state.params.activity ) ) );
+    
   }
+
+  
 
 
   render() {
     const { navigation } = this.props;
     const task = navigation.getParam('task', {});
-    const activity = navigation.getParam('activity', {});
+    let activity = navigation.getParam('activity', {});
+
+    processActivityTimers = (tasks) => {
+      let checkPoints = [];
+      let activityDuration = 0;
+      let tasksConsolidatedDuration = 0;
+  
+      //calculating activityDuration 
+      //based on task durations
+      tasks.map((eachTask, eachTaskIndex) => {
+        tasksConsolidatedDuration += eachTask.duration;      
+        checkPoints.push({
+          taskIndex: eachTaskIndex,
+          taskName: eachTask.name,
+          checkpoint: tasksConsolidatedDuration
+        });
+      })
+  
+      activity.duration = tasksConsolidatedDuration ;
+      activity.checkpoints = checkPoints;
+  
+      return activity;
+    }
+
+    activity = processActivityTimers( activity.tasks );
+
+    console.log( JSON.stringify( activity ) );
 
 
     convertTextToUpperCase = (text) => {
@@ -125,27 +127,40 @@ export default class OngoingActivity extends React.Component {
 
           <View style={styles.timer}>
             <Text style={styles.getStartedText}>{activity.name} - {activity.duration}s </Text>
+            <Timer
+                startImmediately="false" 
+                initialTime={0}
+                direction="forward"
+                lastUnit="m"
+              >
+                {() => (
+                  <React.Fragment>
+                    <Text style={styles.activityTimerTextMins}><Timer.Minutes />:<Timer.Seconds /></Text>
+                  </React.Fragment>
+                )}
+              </Timer>
 
             <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
               <MonoText style={[styles.codeHighlightText, styles.taskName]}>{convertTextToUpperCase(task.name)} ({task.duration})s</MonoText>
             </View>
 
             <Text style={styles.timer}>
-              {/* <Timer
-                initialTime={10 * 1000}
+              <Timer
+                startImmediately="false" 
+                initialTime={task.duration * 1000}
                 direction="backward"
                 lastUnit="m"
                 checkpoints={taskCheckpoints}
               >
                 {() => (
                   <React.Fragment>
-                    <Text style={styles.timerTextMins}><Timer.Minutes /></Text>
-                    <Text style={styles.timerTextSeconds}><Timer.Seconds /></Text>
+                    <Text style={styles.taskTimerTextMins}><Timer.Minutes /></Text>
+                    <Text style={styles.taskTimerTextSeconds}><Timer.Seconds /></Text>
                   </React.Fragment>
                 )}
-              </Timer> */}
+              </Timer>
 
-              
+             
             </Text>
           </View>
         </ScrollView>
@@ -188,10 +203,16 @@ export default class OngoingActivity extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  timerTextMins: {
+  ActivityTimerTextMins: {
+    fontSize: 60
+  },
+  ActivityTimerTextSeconds: {
+    fontSize: 22
+  },
+  taskTimerTextMins: {
     fontSize: 132
   },
-  timerTextSeconds: {
+  taskTimerTextSeconds: {
     fontSize: 52
   },
   timer: {
