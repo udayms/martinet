@@ -13,8 +13,6 @@ import { WebBrowser, Constants } from 'expo';
 import moment from 'moment';
 import data from '../data/db.json';
 
-import Timer from 'react-compound-timer';
-
 import { MonoText } from '../components/StyledText';
 
 export default class OngoingActivity extends React.Component {
@@ -24,16 +22,7 @@ export default class OngoingActivity extends React.Component {
   };
 
   state = {
-    isLoadingComplete: false,
-    startActivityTimer: (start) => {
-      console.log('Start Activity Timer');
-      // setTime(data.value)
-      start()
-    },
-    resetActivityTimer: (reset) => {
-      console.log('Reset Activity Timer');
-      reset()
-    }
+    isLoadingComplete: false
   };
 
   componentWillUnmount = () => {
@@ -46,6 +35,8 @@ export default class OngoingActivity extends React.Component {
 
   componentDidMount = () => {
     console.log('Did Mount...');
+
+    startTimer(5)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -62,50 +53,49 @@ export default class OngoingActivity extends React.Component {
       let checkPoints = [];
       let activityDuration = 0;
       let tasksConsolidatedDuration = 0;
-  
+
       //calculating activityDuration 
       //based on task durations
       tasks.map((eachTask, eachTaskIndex) => {
-        tasksConsolidatedDuration += eachTask.duration;      
+        tasksConsolidatedDuration += eachTask.duration;
         checkPoints.push({
           taskIndex: eachTaskIndex,
           taskName: eachTask.name,
           checkpoint: tasksConsolidatedDuration
         });
       })
-  
-      activity.duration = tasksConsolidatedDuration ;
+
+      activity.duration = tasksConsolidatedDuration;
       activity.checkpoints = checkPoints;
-  
+
       return activity;
     }
 
-    activity = processActivityTimers( activity.tasks )
-    //console.log( JSON.stringify( activity ) )
+    activity = processActivityTimers(activity.tasks)
 
     convertTextToUpperCase = (text) => {
       if (text)
         return text.toUpperCase();
 
       return '';
-    };
-    
-    let taskCheckpoints = [
-      {
-        time: 8 * 1000,
-        callback: () => console.log('Checkpoint A'),
-      },
-      {
-        time: 5 * 1000,
-        callback: () => console.log('Checkpoint B'),
-      },
-      {
-        time: 0,
-        callback: () => console.log('Done'),
-      }
-    ];
+    }
 
-    
+    startTimer = (duration) => {
+      var timer = duration, minutes, seconds;
+      setInterval(function () {
+          minutes = parseInt(timer / 60, 10)
+          seconds = parseInt(timer % 60, 10);
+  
+          minutes = minutes < 10 ? "0" + minutes : minutes;
+          seconds = seconds < 10 ? "0" + seconds : seconds;
+  
+          document.querySelector('#time').textContent = minutes + ":" + seconds;
+  
+          if (--timer < 0) {
+              timer = duration;
+          }
+      }, 1000);
+  }
 
     return (
       <View style={styles.container}>
@@ -116,104 +106,18 @@ export default class OngoingActivity extends React.Component {
         />
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
 
-          <View style={styles.welcomeContainer}>
-            <Image
-              source={
-                __DEV__
-                  ? require('../assets/images/robot-dev.png')
-                  : require('../assets/images/robot-prod.png')
-              }
-              style={styles.welcomeImage}
-            />
-          </View>
-
-          <View style={styles.getStartedContainer}>
-            {this._maybeRenderDevelopmentModeWarning()}
-          </View>
-
-
-
           <View style={styles.timer}>
-            <Text style={styles.getStartedText}>{activity.name} - {activity.duration}s </Text>
-            <Timer
-                startImmediately={false} 
-                initialTime={0}
-                direction="forward"
-                lastUnit="m"
-              >
-                {( { start, resume, pause, stop, reset } ) => {
-                  this.state.startActivityTimer(start)
-                  
-                  return (
-                  <React.Fragment>
-                    <Text style={styles.activityTimerTextMins}><Timer.Minutes />:<Timer.Seconds /></Text>
-                  
-                    <Button onPress={start} title="Start"><Text>Start</Text></Button>
-                    <Button onPress={pause} title="pause"><Text>Pause</Text></Button>
-                    <Button onPress={reset} title="reset"><Text>Reset</Text></Button>
-                </React.Fragment>
-    )}}
-              </Timer>
-
             <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-              <MonoText style={[styles.codeHighlightText, styles.taskName]}>{convertTextToUpperCase(task.name)} ({task.duration})s</MonoText>
+              <MonoText style={[styles.codeHighlightText, styles.taskName]}>{convertTextToUpperCase(task.name)} ({task.duration}s)</MonoText>
             </View>
-
-            <Text style={styles.timer}>
-              {/* <Timer
-                startImmediately="false" 
-                initialTime={task.duration * 1000}
-                direction="backward"
-                lastUnit="m"
-                checkpoints={taskCheckpoints}
-              >
-                {() => (
-                  <React.Fragment>
-                    <Text style={styles.taskTimerTextMins}><Timer.Minutes /></Text>
-                    <Text style={styles.taskTimerTextSeconds}><Timer.Seconds /></Text>
-                  </React.Fragment>
-                )}
-              </Timer>             */}
-            </Text>
-            
+            <Text style={styles.activityName}>{activity.name} - {activity.duration}s</Text>
+            <Text id="time">05:00</Text>
           </View>
+
         </ScrollView>
       </View>
     );
   }
-
-  _maybeRenderDevelopmentModeWarning() {
-    if (__DEV__) {
-      const learnMoreButton = (
-        <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
-          Learn more
-        </Text>
-      );
-
-      return (
-        <Text style={styles.developmentModeText}>
-          Development mode is enabled, your app will be slower but you can use useful development
-          tools. {learnMoreButton}
-        </Text>
-      );
-    } else {
-      return (
-        <Text style={styles.developmentModeText}>
-          You are not in development mode, your app will run at full speed.
-        </Text>
-      );
-    }
-  }
-
-  _handleLearnMorePress = () => {
-    WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');
-  };
-
-  _handleHelpPress = () => {
-    WebBrowser.openBrowserAsync(
-      'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
-    );
-  };
 }
 
 const styles = StyleSheet.create({
@@ -234,7 +138,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#ecf0f1',
+    // backgroundColor: '#ecf0f1',
+  },
+  activityName: {
+    // textTransform: 'uppercase'
+    fontSize: 52
   },
   taskName: {
     // textTransform: 'uppercase'
@@ -276,11 +184,7 @@ const styles = StyleSheet.create({
     color: 'rgba(96,100,109, 0.8)',
     //textTransform: 'uppercase'
   },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
+
   getStartedText: {
     fontSize: 32,
     color: 'rgba(96,100,109, 1)',
@@ -304,12 +208,12 @@ const styles = StyleSheet.create({
       },
     }),
     alignItems: 'center',
-    backgroundColor: '#fbfbfb',
+    // backgroundColor: '#fbfbfb',
     paddingVertical: 20,
   },
   tabBarInfoText: {
     fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
+    // color: 'rgba(96,100,109, 1)',
     textAlign: 'center',
   },
   navigationFilename: {
