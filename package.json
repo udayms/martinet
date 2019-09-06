@@ -19,6 +19,7 @@
     "react-compound-timer": "^1.0.12",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-countdown-component": "^2.2.0",
+    "react-native-progress": "^3.6.0",
     "react-navigation": "^3.0.9"
   },
   "devDependencies": {

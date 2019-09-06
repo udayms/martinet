@@ -5,6 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  Button,
   View
 } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
@@ -23,30 +24,36 @@ export default class OngoingActivity extends React.Component {
   };
 
   state = {
-    isLoadingComplete: false
+    isLoadingComplete: false,
+    startActivityTimer: (start) => {
+      console.log('Start Activity Timer');
+      // setTime(data.value)
+      start()
+    },
+    resetActivityTimer: (reset) => {
+      console.log('Reset Activity Timer');
+      reset()
+    }
   };
 
   componentWillUnmount = () => {
-
+    console.log('Will Unmount...');
   }
 
   componentWillMount = () => {
-    
+    console.log('Will Mount...');
   }
 
-  
+  componentDidMount = () => {
+    console.log('Did Mount...');
+  }
 
   componentWillReceiveProps(nextProps) {
-
-    
-
-    
+    console.log('Will Receive Props...');
   }
 
-  
-
-
   render() {
+    console.log('Render...');
     const { navigation } = this.props;
     const task = navigation.getParam('task', {});
     let activity = navigation.getParam('activity', {});
@@ -73,10 +80,8 @@ export default class OngoingActivity extends React.Component {
       return activity;
     }
 
-    activity = processActivityTimers( activity.tasks );
-
-    console.log( JSON.stringify( activity ) );
-
+    activity = processActivityTimers( activity.tasks )
+    //console.log( JSON.stringify( activity ) )
 
     convertTextToUpperCase = (text) => {
       if (text)
@@ -99,6 +104,8 @@ export default class OngoingActivity extends React.Component {
         callback: () => console.log('Done'),
       }
     ];
+
+    
 
     return (
       <View style={styles.container}>
@@ -125,19 +132,27 @@ export default class OngoingActivity extends React.Component {
           </View>
 
 
+
           <View style={styles.timer}>
             <Text style={styles.getStartedText}>{activity.name} - {activity.duration}s </Text>
             <Timer
-                startImmediately="false" 
+                startImmediately={false} 
                 initialTime={0}
                 direction="forward"
                 lastUnit="m"
               >
-                {() => (
+                {( { start, resume, pause, stop, reset } ) => {
+                  this.state.startActivityTimer(start)
+                  
+                  return (
                   <React.Fragment>
                     <Text style={styles.activityTimerTextMins}><Timer.Minutes />:<Timer.Seconds /></Text>
-                  </React.Fragment>
-                )}
+                  
+                    <Button onPress={start} title="Start"><Text>Start</Text></Button>
+                    <Button onPress={pause} title="pause"><Text>Pause</Text></Button>
+                    <Button onPress={reset} title="reset"><Text>Reset</Text></Button>
+                </React.Fragment>
+    )}}
               </Timer>
 
             <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
@@ -145,7 +160,7 @@ export default class OngoingActivity extends React.Component {
             </View>
 
             <Text style={styles.timer}>
-              <Timer
+              {/* <Timer
                 startImmediately="false" 
                 initialTime={task.duration * 1000}
                 direction="backward"
@@ -158,10 +173,9 @@ export default class OngoingActivity extends React.Component {
                     <Text style={styles.taskTimerTextSeconds}><Timer.Seconds /></Text>
                   </React.Fragment>
                 )}
-              </Timer>
-
-             
+              </Timer>             */}
             </Text>
+            
           </View>
         </ScrollView>
       </View>
